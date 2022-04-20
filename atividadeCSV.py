@@ -2,7 +2,7 @@ import csv
 import pymongo
 
 myclient = pymongo.MongoClient("mongodb://localhost:27017/")
-mydb = myclient["atividade_CVS"]
+mydb = myclient["prova_1_CVS"]
 mycol = mydb["dados_CSV"]
 
 numero = []
@@ -23,17 +23,18 @@ with open('licitacoes_2021.csv', 'r') as arquivo:
         objeto.append(item.split(';')[4])
 
 
-#for i, dado in enumerate(numero):
-    #mycol.insert_one({'NUMERO' : numero[i], 'MODALIDADE': modalidade[i], 'UNID. GESTORA': unidadeGestora[i],
-                      #'SITUACAO': situacao[i], 'OBJETO': objeto[i]})
+for i, dado in enumerate(numero):
+    mycol.insert_one({'NUMERO' : numero[i], 'MODALIDADE': modalidade[i], 'UNIDADE GESTORA': unidadeGestora[i],
+                      'SITUACAO': situacao[i], 'OBJETO': objeto[i]})
 
 while opcao != 0:
     print("#### ESCOLHA UMA DAS OPÇÕES ABAIXO ####")
     print("1 - Consultar NUMERO")
     print("2 - Consultar MODALIDADE")
-    print("3 - Consultar UNID. GESTORA")
+    print("3 - Consultar UNIDADE GESTORA")
     print("4 - Consultar SITUACAO")
     print("5 - Consultar OBJETO")
+    print("6 - Adicionar Informação")
     print("0 - SAIR")
 
     opcao = int(input())
@@ -70,14 +71,14 @@ while opcao != 0:
             if opcao == 0:
                 print("PROGRAMA FINALIZADO")
         elif opcao == 3:
-            for x in mycol.find({}, {"_id": 2, "UNID. GESTORA": 1}):
+            for x in mycol.find({}, {"_id": 2, "UNIDADE GESTORA": 1}):
                 print(x)
             print("ESCOLHA UMA OPÇÃO")
-            print("1 - Gerar Arquivo UNID. GESTORA")
+            print("1 - Gerar Arquivo UNIDADE GESTORA")
             print("0 - SAIR")
             opcao = int(input())
             if opcao == 1:
-                arquivo = open('arquivos/UNIDIDADE_GESTORA.txt', 'w')
+                arquivo = open('arquivos/UNIDADE GESTORA.txt', 'w')
                 for obj3 in unidadeGestora:
                     arquivo.writelines(str(obj3) + "\n")
                 arquivo.close()
@@ -111,6 +112,40 @@ while opcao != 0:
                 arquivo.close()
             if opcao == 0:
                 print("PROGRAMA FINALIZADO")
+        elif opcao == 6:
+            print("Qual informação deseja adicionar?/n")
+            print("1 - NUMERO")
+            print("2 - MODALIDADE")
+            print("3 - UNID. GESTORA")
+            print("4 - SITUACAO")
+            print("5 - OBJETO")
+            opcao = int(input())
+            if opcao == 1:
+                print("Informe o NUMERO que deseja incluir!")
+                number = input()
+                mycol.insert_one({'NUMERO' : number})
+                numero.append(number)
+            elif opcao == 2:
+                print("Informe a MODALIDADE que deseja incluir!")
+                modality = input()
+                mycol.insert_one({'MODALIDADE': modality})
+                modalidade.append(modality)
+            elif opcao == 3:
+                print("Informe a UNIDADE GESTORA que deseja incluir!")
+                unitGest = input()
+                mycol.insert_one({'UNIDADE GESTORA': unitGest})
+                unidadeGestora.append(unitGest)
+            elif opcao == 4:
+                print("Informe a SITUACAO que deseja incluir!")
+                situasion = input()
+                mycol.insert_one({'SITUACAO': situasion})
+                situacao.append(situasion)
+            elif opcao == 5:
+                print("Informe o OBJETO que deseja incluir!")
+                object = input()
+                mycol.insert_one({'OBJETO': object})
+                objeto.append(object)
+            arquivo.close()
         else:
             print("#### OPÇÃO INVÁLIDA ####")
             print("ESCOLHA UMA OPÇÃO")
